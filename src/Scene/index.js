@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
+import anime from "animejs/lib/anime.es.js";
 import Text from "./Text";
 import noiseShader from "./noiseShader";
 
@@ -9,18 +10,42 @@ function Sphere() {
 
   const [bpm, setBpm] = useState(115);
   let materialShader = useRef(null).current;
-  let scaleFactor = useRef(0.2).current;
-  let noiseFactor = useRef(0).current;
-  let counter = useRef(0).current;
+  let scaleFactor = useRef({ value: 0.2 }).current;
+  let noiseFactor = useRef({
+    value: 0,
+  }).current;
+
+  //   let counter = useRef(0).current;
+
+  const increase = anime({
+    targets: noiseFactor,
+    value: bpm * 2,
+    duration: (60 / bpm) * 1000,
+    direction: "alternate",
+    loop: true,
+    autoplay: false,
+    easing: "easeInOutSine",
+  });
+  const zoom = anime({
+    targets: scaleFactor,
+    value: 0.3,
+    duration: (60 / bpm) * 1000,
+    direction: "alternate",
+    loop: true,
+    autoplay: false,
+    easing: "easeInOutSine",
+  });
 
   useEffect(() => {
-    let interval = setInterval(() => {
-      noiseFactor = counter % 2 === 0 ? 0 : bpm * 2;
-      scaleFactor = counter % 2 === 0 ? 0.2 : 0.25;
-      counter++;
-    }, (60 / bpm) * 1000);
+    //non animated, more manual version
+    // const interval = setInterval(() => {
+    //   noiseFactor.value = counter % 2 === 0 ? bpm * 2 : 0;
+    //   counter++;
+    // }, (60 / bpm) * 1000);
+    increase.play();
+    zoom.play();
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, [geometry.current]);
 
   useFrame((state) => {
@@ -28,24 +53,24 @@ function Sphere() {
       sphere.current.rotation.y += 0.005;
       sphere.current.rotation.x -= 0.005;
 
-      sphere.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
+      sphere.current.scale.set(
+        scaleFactor.value,
+        scaleFactor.value,
+        scaleFactor.value
+      );
     }
 
     if (materialShader) {
-      materialShader.uniforms.uNoiseFactor.value = noiseFactor;
+      materialShader.uniforms.uNoiseFactor.value = noiseFactor.value;
     }
   });
 
   return (
-    <mesh
-      onClick={() => console.log("CLICKED")}
-      ref={sphere}
-      scale={[0.2, 0.2, 0.2]}
-    >
+    <mesh ref={sphere} scale={[0.2, 0.2, 0.2]}>
       <icosahedronBufferGeometry
         ref={geometry}
         attach="geometry"
-        args={[500, 20]}
+        args={[500, 30]}
       />
       <meshStandardMaterial
         color="#ff00ff"

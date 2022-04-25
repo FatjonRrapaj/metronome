@@ -10,6 +10,7 @@ import { extend, useLoader } from "@react-three/fiber";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import boldUrl from "../assets/fonts/bold.blob";
+import anime from "animejs/lib/anime.es.js";
 
 export default function Text({
   children,
@@ -23,11 +24,25 @@ export default function Text({
   extend({ TextGeometry });
 
   const [hovered, setHovered] = useState(false);
+  const mesh = useRef();
+  const group = useRef();
 
   useEffect(() => {
     document.body.style.cursor = hovered ? "pointer" : "auto";
     return () => (document.body.style.cursor = "auto");
   }, [hovered]);
+
+  useEffect(() => {
+    if (!group.current) {
+      return;
+    }
+    anime({
+      targets: group.current.rotation,
+      z: Math.PI * 2,
+      duration: 1500,
+      autoplay: true,
+    });
+  }, [group.current]);
 
   const font = useLoader(FontLoader, boldUrl);
   const config = useMemo(
@@ -44,7 +59,6 @@ export default function Text({
     }),
     [font]
   );
-  const mesh = useRef();
   useLayoutEffect(() => {
     const size = new Vector3();
     mesh.current.geometry.computeBoundingBox();
@@ -56,9 +70,10 @@ export default function Text({
   }, [children]);
   return (
     <group
+      ref={group}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      onClick={onClick}
+      onClick={onClick()}
       {...props}
       scale={[0.1 * size, 0.1 * size, 0.1]}
     >
