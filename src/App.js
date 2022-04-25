@@ -1,12 +1,7 @@
 import Scene from "./Scene";
 
 function App() {
-  return (
-    <>
-      <Scene />
-      <div></div>
-    </>
-  );
+  return <Scene />;
 }
 
 export default App;
