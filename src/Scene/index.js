@@ -3,6 +3,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import anime from "animejs/lib/anime.es.js";
 import Text from "./Text";
 import noiseShader from "./noiseShader";
+import Title from "./Title";
+import BPMSelectors from "./BPMSelectors";
 
 function Sphere() {
   const sphere = useRef();
@@ -132,54 +134,8 @@ function Scene() {
     >
       <directionalLight position={[-10, 0, 500]} intensity={0.5} />
       <directionalLight position={[10, 0, 500]} intensity={0.5} />
-      <Text
-        selected={true}
-        size={0.5}
-        position={[-10, -20, 700]}
-        children="72"
-      />
-      <Text size={0.5} position={[0, -20, 700]} children="74" />
-      <Text size={0.5} position={[10, -20, 700]} children="82" />
-
-      <group>
-        <Text
-          size={0.8}
-          position={[0, 30, 700]}
-          rotation={[Math.PI / 16, 0, 0]}
-          children="DIGITAL"
-        />
-        <Text
-          size={0.8}
-          position={[0, 26, 700]}
-          rotation={[Math.PI / 16, 0, 0]}
-          children="3D"
-        />
-        <Text
-          size={0.8}
-          position={[0, 22, 700]}
-          rotation={[Math.PI / 16, 0, 0]}
-          children="METRONOME"
-        />
-      </group>
-
-      <Text
-        size={0.5}
-        position={[-10, -30, 700]}
-        rotation={[-Math.PI / 16, 0, 0]}
-        children="84"
-      />
-      <Text
-        size={0.5}
-        position={[0, -30, 700]}
-        rotation={[-Math.PI / 16, 0, 0]}
-        children="128"
-      />
-      <Text
-        size={0.5}
-        position={[10, -30, 700]}
-        rotation={[-Math.PI / 16, 0, 0]}
-        children="138"
-      />
+      <Title />
+      <BPMSelectors />
       <Sphere />
     </Canvas>
   );
