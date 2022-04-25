@@ -1,14 +1,15 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import anime from "animejs/lib/anime.es.js";
 
+import { BPMContext } from "../../context";
 import noiseShader from "./noiseShader";
 
-function Sphere({ wireframe, color = "#ff00ff" }) {
+function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
+  const bpm = 72;
   const sphere = useRef();
   const geometry = useRef();
 
-  const [bpm] = useState(72);
   let materialShader = useRef(null).current;
   let scaleFactor = useRef({ value: 0.2 }).current;
   let noiseFactor = useRef({
@@ -26,7 +27,7 @@ function Sphere({ wireframe, color = "#ff00ff" }) {
   });
   const zoom = anime({
     targets: scaleFactor,
-    value: 0.3,
+    value: maxScale,
     duration: (60 / bpm) * 1000,
     direction: "alternate",
     loop: true,

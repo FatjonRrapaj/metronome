@@ -4,7 +4,7 @@ function Ball() {
   return (
     <group>
       <Sphere wireframe={false} />
-      <Sphere wireframe={true} color={"#fff"} />
+      <Sphere wireframe={true} color={"#0000ff"} maxScale={0.4} />
     </group>
   );
 }
