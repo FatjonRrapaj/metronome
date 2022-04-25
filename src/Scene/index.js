@@ -1,37 +1,58 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { DoubleSide } from "three";
-import SimplexNoise from "simplex-noise";
 import noiseShader from "./noiseShader";
+import { Vector3 } from "three";
 
 function Sphere() {
   const sphere = useRef();
   const geometry = useRef();
-  const noise = new SimplexNoise();
+
+  const [bpm, setBpm] = useState(115);
+  const oneBeatDurationInMs = (bpm) => 60000 / bpm;
+
+  let materialShader = useRef(null).current;
+  let scaleFactor = useRef(0.2).current;
+  let noiseFactor = useRef(0).current;
+  let counter = useRef(0).current;
 
   useEffect(() => {
-    console.log("GEOMETRY", geometry.current);
+    let interval = setInterval(() => {
+      noiseFactor = counter % 2 === 0 ? 0 : bpm * 2;
+      scaleFactor = counter % 2 === 0 ? 0.2 : 0.25;
+      counter++;
+    }, (60 / bpm) * 1000);
+
+    return () => clearInterval(interval);
   }, [geometry.current]);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (sphere.current && geometry.current) {
       sphere.current.rotation.y += 0.005;
+      sphere.current.rotation.x -= 0.005;
+
+      sphere.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    }
+
+    if (materialShader) {
+      materialShader.uniforms.uNoiseFactor.value = noiseFactor;
     }
   });
 
-  let materialShader = useRef(null).current;
-
   return (
-    <mesh ref={sphere}>
+    <mesh
+      onClick={() => console.log("CLICKED")}
+      ref={sphere}
+      scale={[0.2, 0.2, 0.2]}
+    >
       <icosahedronBufferGeometry
         ref={geometry}
         attach="geometry"
-        args={[100, 100]}
+        args={[500, 20]}
       />
       <meshStandardMaterial
-        side={DoubleSide}
         color="#ff00ff"
-        wireframe={true}
+        wireframe={false}
         onBeforeCompile={(shader) => {
           // The perlin noise code goes here, above the main() function in the shader.
           // Noise shader from https://github.com/ashima/webgl-noise.
@@ -46,7 +67,7 @@ function Sphere() {
             ...shader.uniforms,
             uNoiseFactor: {
               //80.0
-              value: 80.0,
+              value: 0.0,
             },
             uPosotionNoiseFactor: {
               //5.0
@@ -82,15 +103,15 @@ function Scene() {
     <Canvas
       shadows
       camera={{
-        far: 500,
+        far: 800,
         near: 1,
         fov: 45,
-        position: [0, 0, 450],
+        position: [0, 0, 600],
         aspect: window.innerWidth / window.innerHeight,
       }}
-      antialias
     >
-      <directionalLight intensity={0.5} />
+      <directionalLight position={[-10, 0, 500]} intensity={0.5} />
+      <directionalLight position={[10, 0, 500]} intensity={0.5} />
       <Sphere />
     </Canvas>
   );
