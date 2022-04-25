@@ -1,12 +1,13 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import anime from "animejs/lib/anime.es.js";
 
-import { BPMContext } from "../../context";
+import useStore from "../../state";
 import noiseShader from "./noiseShader";
 
 function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
-  const bpm = 72;
+  const bpm = useStore((state) => state.bpm);
+  console.log("bpm: ", bpm);
   const sphere = useRef();
   const geometry = useRef();
 
@@ -16,24 +17,32 @@ function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
     value: 0,
   }).current;
 
-  const increase = anime({
-    targets: noiseFactor,
-    value: bpm * 2,
-    duration: (60 / bpm) * 1000,
-    direction: "alternate",
-    loop: true,
-    autoplay: false,
-    easing: "easeInOutSine",
-  });
-  const zoom = anime({
-    targets: scaleFactor,
-    value: maxScale,
-    duration: (60 / bpm) * 1000,
-    direction: "alternate",
-    loop: true,
-    autoplay: false,
-    easing: "easeInOutSine",
-  });
+  const increase = useMemo(
+    () =>
+      anime({
+        targets: noiseFactor,
+        value: bpm * 2,
+        duration: (60 / bpm) * 1000,
+        direction: "alternate",
+        loop: true,
+        autoplay: false,
+        easing: "easeInOutSine",
+      }),
+    [bpm]
+  );
+  const zoom = useMemo(
+    () =>
+      anime({
+        targets: scaleFactor,
+        value: maxScale,
+        duration: (60 / bpm) * 1000,
+        direction: "alternate",
+        loop: true,
+        autoplay: false,
+        easing: "easeInOutSine",
+      }),
+    [bpm]
+  );
 
   //   let counter = useRef(0).current;
   useEffect(() => {
@@ -47,7 +56,10 @@ function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
     // }, (60 / bpm) * 1000);
 
     // return () => clearInterval(interval);
-  }, [geometry.current]);
+  }, [
+    // geometry.current,
+    bpm,
+  ]);
 
   useFrame(() => {
     if (sphere.current && geometry.current) {

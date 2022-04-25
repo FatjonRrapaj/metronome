@@ -66,8 +66,11 @@ export default function Text({
   );
 
   useFrame(({ clock }) => {
-    if (selected && !!group.current) {
+    if (!group.current) return;
+    if (selected) {
       group.current.rotation.y = Math.sin(clock.getElapsedTime());
+    } else {
+      if (group.current.rotation.y !== 0) group.current.rotation.y = 0;
     }
   });
 
@@ -86,7 +89,7 @@ export default function Text({
       ref={group}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      onClick={onClick && onClick()}
+      onClick={() => onClick && onClick()}
       {...props}
       scale={[0.1 * size, 0.1 * size, 0.1]}
     >

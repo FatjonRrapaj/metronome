@@ -1,3 +1,4 @@
+import useStore from "../../state";
 import Text from "./Text";
 
 const bpmPreset = [
@@ -34,10 +35,13 @@ const bpmPreset = [
 ];
 
 function BPMSelectors() {
+  const { bpm, setBpm } = useStore((state) => state);
   return (
     <group>
       {bpmPreset.map(({ value, position, rotation }, index) => (
         <Text
+          onClick={() => setBpm(value)}
+          selected={bpm === value}
           key={`${value}_${index}`}
           size={0.5}
           position={position}
