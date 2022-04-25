@@ -15,8 +15,6 @@ function Sphere() {
     value: 0,
   }).current;
 
-  //   let counter = useRef(0).current;
-
   const increase = anime({
     targets: noiseFactor,
     value: bpm * 2,
@@ -35,6 +33,8 @@ function Sphere() {
     autoplay: false,
     easing: "easeInOutSine",
   });
+
+  //   let counter = useRef(0).current;
 
   useEffect(() => {
     //non animated, more manual version
@@ -132,7 +132,12 @@ function Scene() {
     >
       <directionalLight position={[-10, 0, 500]} intensity={0.5} />
       <directionalLight position={[10, 0, 500]} intensity={0.5} />
-      <Text size={0.5} position={[-10, -20, 700]} children="72" />
+      <Text
+        selected={true}
+        size={0.5}
+        position={[-10, -20, 700]}
+        children="72"
+      />
       <Text size={0.5} position={[0, -20, 700]} children="74" />
       <Text size={0.5} position={[10, -20, 700]} children="82" />
 
