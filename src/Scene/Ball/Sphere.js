@@ -51,7 +51,8 @@ function Sphere({ wireframe, color = "#ff00ff" }) {
   useFrame(() => {
     if (sphere.current && geometry.current) {
       sphere.current.rotation.y += 0.005;
-      sphere.current.rotation.x -= 0.005;
+      sphere.current.rotation.x += 0.005;
+      sphere.current.rotation.z += 0.005;
 
       sphere.current.scale.set(
         scaleFactor.value,
