@@ -40,6 +40,7 @@ function Sphere() {
     //non animated, more manual version
     // const interval = setInterval(() => {
     //   noiseFactor.value = counter % 2 === 0 ? bpm * 2 : 0;
+    //   scaleFactor.value =  counter % 2 === 0 ? 0.3 : 0.2
     //   counter++;
     // }, (60 / bpm) * 1000);
     increase.play();

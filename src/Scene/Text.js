@@ -40,6 +40,7 @@ export default function Text({
       targets: group.current.rotation,
       z: Math.PI * 2,
       duration: 1500,
+      delay: 500,
       autoplay: true,
     });
   }, [group.current]);
