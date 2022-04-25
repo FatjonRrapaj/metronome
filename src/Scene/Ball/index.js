@@ -3,8 +3,8 @@ import Sphere from "./Sphere";
 function Ball() {
   return (
     <group>
-      <Sphere wireframe={true} />
       <Sphere wireframe={false} />
+      <Sphere wireframe={true} color={"#fff"} />
     </group>
   );
 }

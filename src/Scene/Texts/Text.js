@@ -9,7 +9,7 @@ import React, {
 import { extend, useLoader, useFrame } from "@react-three/fiber";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
-import boldUrl from "../assets/fonts/bold.blob";
+import boldUrl from "../../assets/fonts/bold.blob";
 import anime from "animejs/lib/anime.es.js";
 
 export default function Text({

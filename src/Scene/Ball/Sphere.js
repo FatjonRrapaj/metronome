@@ -4,11 +4,11 @@ import anime from "animejs/lib/anime.es.js";
 
 import noiseShader from "./noiseShader";
 
-function Sphere({ wireframe }) {
+function Sphere({ wireframe, color = "#ff00ff" }) {
   const sphere = useRef();
   const geometry = useRef();
 
-  const [bpm] = useState(115);
+  const [bpm] = useState(72);
   let materialShader = useRef(null).current;
   let scaleFactor = useRef({ value: 0.2 }).current;
   let noiseFactor = useRef({
@@ -72,7 +72,7 @@ function Sphere({ wireframe }) {
         args={[500, 30]}
       />
       <meshStandardMaterial
-        color="#ff00ff"
+        color={color}
         wireframe={wireframe}
         onBeforeCompile={(shader) => {
           // The perlin noise code goes here, above the main() function in the shader.
