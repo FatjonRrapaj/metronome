@@ -7,7 +7,6 @@ import click from "../../assets/sounds/click.wav";
 function Ball() {
   const { bpm, audioEnabled, color, wireframeColor, emissiveIntensity } =
     useStore((state) => state);
-  console.log("audioEnabled: ", audioEnabled);
 
   const [clickSound] = useState(() => {
     const audio = new Audio(click);
