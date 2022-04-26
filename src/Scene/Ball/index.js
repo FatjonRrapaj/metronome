@@ -5,22 +5,26 @@ import useStore from "../../store";
 import click from "../../assets/sounds/click.wav";
 
 function Ball() {
-  const { bpm, color, wireframeColor, emissiveIntensity } = useStore(
-    (state) => state
-  );
+  const { bpm, audioEnabled, color, wireframeColor, emissiveIntensity } =
+    useStore((state) => state);
+  console.log("audioEnabled: ", audioEnabled);
+
   const [clickSound] = useState(() => {
     const audio = new Audio(click);
-    audio.muted = true;
     return audio;
   });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      // clickSound.play();
+    let interval;
+    if (!audioEnabled) return;
+    interval = setInterval(() => {
+      clickSound.play();
     }, (60 / bpm) * 1000);
 
-    return () => clearInterval(interval);
-  }, [bpm]);
+    return () => {
+      interval && clearInterval(interval);
+    };
+  }, [bpm, audioEnabled]);
 
   return (
     <group>
