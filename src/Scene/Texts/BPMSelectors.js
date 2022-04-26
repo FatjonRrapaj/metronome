@@ -4,7 +4,7 @@ import Text from "./Text";
 const bpmPreset = [
   {
     value: 72,
-    position: [-10, -20, 700],
+    position: [-10, -25, 700],
     rotation: [0, 0, 0],
     emissiveIntensity: 1,
     color: "#ff00ff",
@@ -12,7 +12,7 @@ const bpmPreset = [
   },
   {
     value: 74,
-    position: [0, -20, 700],
+    position: [0, -25, 700],
     rotation: [0, 0, 0],
     emissiveIntensity: 3,
     color: "#000fff",
@@ -20,7 +20,7 @@ const bpmPreset = [
   },
   {
     value: 82,
-    position: [10, -20, 700],
+    position: [10, -25, 700],
     rotation: [-Math.PI / 16, 0, 0],
     emissiveIntensity: 1,
     color: "#00ff00",
@@ -55,6 +55,7 @@ const bpmPreset = [
 function BPMSelectors() {
   const { bpm, setBpm, setColor, setWireframeColor, setEmissiveIntensity } =
     useStore((state) => state);
+
   return (
     <group>
       {bpmPreset.map(
@@ -71,7 +72,7 @@ function BPMSelectors() {
         ) => (
           <Text
             onClick={() => {
-              console.log("CLICKED");
+              console.log("CCC");
               setBpm(value);
               setColor(color);
               setWireframeColor(wireframeColor);

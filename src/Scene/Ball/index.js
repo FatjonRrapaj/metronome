@@ -8,12 +8,15 @@ function Ball() {
   const { bpm, color, wireframeColor, emissiveIntensity } = useStore(
     (state) => state
   );
-
-  const [clickSound] = useState(() => new Audio(click));
+  const [clickSound] = useState(() => {
+    const audio = new Audio(click);
+    audio.muted = true;
+    return audio;
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
-      clickSound.play();
+      // clickSound.play();
     }, (60 / bpm) * 1000);
 
     return () => clearInterval(interval);
