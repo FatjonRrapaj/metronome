@@ -2,64 +2,55 @@ import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import anime from "animejs/lib/anime.es.js";
 
-import useStore from "../../state";
+import useStore from "../../store";
 import noiseShader from "./noiseShader";
 
-function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
+function Sphere({
+  wireframe,
+  color = "#ff00ff",
+  maxScale = 0.3,
+  emissiveIntensity,
+}) {
   const bpm = useStore((state) => state.bpm);
-  console.log("bpm: ", bpm);
   const sphere = useRef();
   const geometry = useRef();
 
-  let materialShader = useRef(null).current;
-  let scaleFactor = useRef({ value: 0.2 }).current;
-  let noiseFactor = useRef({
-    value: 0,
-  }).current;
+  let materialShader = useRef({ value: null }).current;
+  let transformSphere = useRef({ scale: 0.2, noise: 0 }).current;
 
-  const increase = useMemo(
-    () =>
-      anime({
-        targets: noiseFactor,
-        value: bpm * 2,
-        duration: (60 / bpm) * 1000,
-        direction: "alternate",
-        loop: true,
-        autoplay: false,
-        easing: "easeInOutSine",
-      }),
-    [bpm]
-  );
-  const zoom = useMemo(
-    () =>
-      anime({
-        targets: scaleFactor,
-        value: maxScale,
-        duration: (60 / bpm) * 1000,
-        direction: "alternate",
-        loop: true,
-        autoplay: false,
-        easing: "easeInOutSine",
-      }),
-    [bpm]
-  );
+  // //non animated, more 'manual' version:
+  // let counter = useRef(0).current;
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     noiseFactor.value = counter % 2 === 0 ? bpm * 2 : 0;
+  //     scaleFactor.value = counter % 2 === 0 ? 0.3 : 0.2;
+  //     counter++;
+  //   }, (60 / bpm) * 1000);
 
-  //   let counter = useRef(0).current;
+  //   return () => clearInterval(interval);
+  // }, [geometry.current]);
+
   useEffect(() => {
-    increase.play();
-    zoom.play();
-    //non animated, more 'manual' version:
-    // const interval = setInterval(() => {
-    //   noiseFactor.value = counter % 2 === 0 ? bpm * 2 : 0;
-    //   scaleFactor.value =  counter % 2 === 0 ? 0.3 : 0.2
-    //   counter++;
-    // }, (60 / bpm) * 1000);
+    if (!materialShader) return;
+    const transformAnim = anime({
+      targets: transformSphere,
+      noise: bpm * 4,
+      scale: maxScale,
+      duration: (60 / bpm) * 1000,
+      direction: "alternate",
+      loop: true,
+      autoplay: false,
+      easing: "easeInOutSine",
+    });
+    transformAnim.play();
 
-    // return () => clearInterval(interval);
-  }, [
-    // geometry.current,
-    bpm,
-  ]);
+    return () => {
+      transformAnim.pause();
+      transformAnim.seek(0);
+      transformSphere.scale = 0.2;
+      transformSphere.noise = 0;
+    };
+  }, [bpm, materialShader]);
 
   useFrame(() => {
     if (sphere.current && geometry.current) {
@@ -68,15 +59,15 @@ function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
       sphere.current.rotation.z += 0.005;
 
       sphere.current.scale.set(
-        scaleFactor.value,
-        scaleFactor.value,
-        scaleFactor.value
+        transformSphere.scale,
+        transformSphere.scale,
+        transformSphere.scale
       );
     }
-    if (materialShader) {
-      materialShader.uniforms.uNoiseFactor.value = noiseFactor.value;
+    if (materialShader.value) {
+      materialShader.value.uniforms.uNoiseFactor.value = transformSphere.noise;
     }
-  });
+  }, 0);
 
   return (
     <mesh ref={sphere} scale={[0.2, 0.2, 0.2]}>
@@ -88,16 +79,13 @@ function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
       <meshStandardMaterial
         color={color}
         wireframe={wireframe}
+        emissive={color}
+        emissiveIntensity={emissiveIntensity}
         onBeforeCompile={(shader) => {
-          // The perlin noise code goes here, above the main() function in the shader.
-          // Noise shader from https://github.com/ashima/webgl-noise.
           shader.vertexShader = shader.vertexShader.replace(
             "#include <uv_pars_vertex>",
             noiseShader
           );
-          /**
-           * Adding controls to existing glsl.
-           */
           shader.uniforms = {
             ...shader.uniforms,
             uNoiseFactor: {
@@ -111,7 +99,6 @@ function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
             "uniform float uNoiseFactor;\n" +
             "uniform float uPosotionNoiseFactor;\n" +
             shader.vertexShader;
-          // The vertex shader code that goes inside main() needs to be separate from the perlin noise code.
           shader.vertexShader = shader.vertexShader.replace(
             "#include <worldpos_vertex>",
             `vUv = uv;
@@ -121,7 +108,8 @@ function Sphere({ wireframe, color = "#ff00ff", maxScale = 0.3 }) {
                       vec3 newPosition = position + normal * displacement;
                       gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);`
           );
-          materialShader = shader;
+          console.log("E N T R A D A CABRONSITO");
+          materialShader.value = shader;
         }}
       />
     </mesh>

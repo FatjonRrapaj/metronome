@@ -54,10 +54,10 @@ export default function Text({
     () => ({
       font,
       size: 40,
-      height: 4,
+      height: 2,
       curveSegments: 32,
       bevelEnabled: true,
-      bevelThickness: 2,
+      bevelThickness: 6,
       bevelSize: 2.5,
       bevelOffset: 0,
       bevelSegments: 8,

@@ -7,7 +7,7 @@ function Title() {
         size={0.8}
         position={[0, 30, 700]}
         rotation={[Math.PI / 16, 0, 0]}
-        children="DIGITAL"
+        children="FUNKY"
       />
       <Text
         size={0.8}
