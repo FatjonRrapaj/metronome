@@ -1,5 +1,7 @@
 # 3D METRONOME
 
+The site is live [Here🚀](https://fatjonrrapaj.github.io/metronome/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
 
 It uses [THREE.JS](https://threejs.org/) and [React Three Fiber](https://github.com/pmndrs/react-three-fiber) for visualization 🎬
