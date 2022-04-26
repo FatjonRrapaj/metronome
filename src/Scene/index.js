@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
-import Title from "./Texts/Title";
-import BPMSelectors from "./Texts/BPMSelectors";
+
+import { Title, BPMSelectors } from "./Texts";
 import Ball from "./Ball";
 
 function Scene() {
@@ -15,7 +15,7 @@ function Scene() {
         aspect: window.innerWidth / window.innerHeight,
       }}
     >
-      <directionalLight position={[-10, 0, 500]} intensity={1} />
+      <directionalLight position={[-10, 0, 600]} intensity={1} />
       <directionalLight position={[10, 0, 500]} intensity={1} />
       <Title />
       <BPMSelectors />
