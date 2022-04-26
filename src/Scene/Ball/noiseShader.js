@@ -1,3 +1,5 @@
+// Noise shader from https://github.com/ashima/webgl-noise.
+
 const noiseShader = `varying vec2 vUv;
 varying float noise;
 vec3 mod289(vec3 x)

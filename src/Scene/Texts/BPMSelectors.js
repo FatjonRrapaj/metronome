@@ -1,56 +1,6 @@
 import useStore from "../../store";
 import Text from "./Text";
-
-const bpmPreset = [
-  {
-    value: 72,
-    position: [-10, -25, 700],
-    rotation: [0, 0, 0],
-    emissiveIntensity: 1,
-    color: "#ff00ff",
-    wireframeColor: "#0000ff",
-  },
-  {
-    value: 74,
-    position: [0, -25, 700],
-    rotation: [0, 0, 0],
-    emissiveIntensity: 3,
-    color: "#000fff",
-    wireframeColor: "#fff",
-  },
-  {
-    value: 82,
-    position: [10, -25, 700],
-    rotation: [-Math.PI / 16, 0, 0],
-    emissiveIntensity: 1,
-    color: "#00ff00",
-    wireframeColor: "#ff0000",
-  },
-  {
-    value: 84,
-    position: [-10, -30, 700],
-    rotation: [-Math.PI / 16, 0, 0],
-    emissiveIntensity: 1,
-    color: "#f000ff",
-    wireframeColor: "#00ff00",
-  },
-  {
-    value: 128,
-    position: [0, -30, 700],
-    rotation: [-Math.PI / 16, 0, 0],
-    emissiveIntensity: 4,
-    color: "#00ff00",
-    wireframeColor: "#ff00ff",
-  },
-  {
-    value: 138,
-    position: [10, -30, 700],
-    rotation: [-Math.PI / 16, 0, 0],
-    emissiveIntensity: 1,
-    color: "#00ffff",
-    wireframeColor: "#ff0000",
-  },
-];
+import bpmPreset from "./selectorsConfig";
 
 function BPMSelectors() {
   const { bpm, setBpm, setColor, setWireframeColor, setEmissiveIntensity } =
@@ -58,35 +8,22 @@ function BPMSelectors() {
 
   return (
     <group>
-      {bpmPreset.map(
-        (
-          {
-            value,
-            position,
-            rotation,
-            color,
-            wireframeColor,
-            emissiveIntensity,
-          },
-          index
-        ) => (
-          <Text
-            onClick={() => {
-              console.log("CCC");
-              setBpm(value);
-              setColor(color);
-              setWireframeColor(wireframeColor);
-              setEmissiveIntensity(emissiveIntensity);
-            }}
-            selected={bpm === value}
-            key={`${value}_${index}`}
-            size={0.5}
-            position={position}
-            rotation={rotation}
-            children={`${value}`}
-          />
-        )
-      )}
+      {bpmPreset.map((preset, index) => (
+        <Text
+          onClick={() => {
+            setBpm(preset.value);
+            setColor(preset.color);
+            setWireframeColor(preset.wireframeColor);
+            setEmissiveIntensity(preset.emissiveIntensity);
+          }}
+          selected={bpm === preset.value}
+          key={`${preset.value}_${index}`}
+          size={0.5}
+          position={preset.position}
+          rotation={preset.rotation}
+          children={`${preset.value}`}
+        />
+      ))}
     </group>
   );
 }

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import anime from "animejs/lib/anime.es.js";
 
@@ -57,6 +57,36 @@ function Sphere({
     }
   }, 0);
 
+  function onBeforeCompile(shader) {
+    shader.vertexShader = shader.vertexShader.replace(
+      "#include <uv_pars_vertex>",
+      noiseShader
+    );
+    shader.uniforms = {
+      ...shader.uniforms,
+      uNoiseFactor: {
+        value: 0.0,
+      },
+      uPosotionNoiseFactor: {
+        value: 0,
+      },
+    };
+    shader.vertexShader =
+      "uniform float uNoiseFactor;\n" +
+      "uniform float uPosotionNoiseFactor;\n" +
+      shader.vertexShader;
+    shader.vertexShader = shader.vertexShader.replace(
+      "#include <worldpos_vertex>",
+      `vUv = uv;
+                noise = uNoiseFactor * turbulence(normal);
+                float b = uPosotionNoiseFactor * pnoise(0.01 * position, vec3(100.0));
+                float displacement = noise + b;
+                vec3 newPosition = position + normal * displacement;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);`
+    );
+    materialShader.value = shader;
+  }
+
   return (
     <mesh ref={sphere} scale={[0.2, 0.2, 0.2]}>
       <icosahedronBufferGeometry
@@ -70,33 +100,7 @@ function Sphere({
         emissive={color}
         emissiveIntensity={emissiveIntensity}
         onBeforeCompile={(shader) => {
-          shader.vertexShader = shader.vertexShader.replace(
-            "#include <uv_pars_vertex>",
-            noiseShader
-          );
-          shader.uniforms = {
-            ...shader.uniforms,
-            uNoiseFactor: {
-              value: 0.0,
-            },
-            uPosotionNoiseFactor: {
-              value: 0,
-            },
-          };
-          shader.vertexShader =
-            "uniform float uNoiseFactor;\n" +
-            "uniform float uPosotionNoiseFactor;\n" +
-            shader.vertexShader;
-          shader.vertexShader = shader.vertexShader.replace(
-            "#include <worldpos_vertex>",
-            `vUv = uv;
-                      noise = uNoiseFactor * turbulence(normal);
-                      float b = uPosotionNoiseFactor * pnoise(0.01 * position, vec3(100.0));
-                      float displacement = noise + b;
-                      vec3 newPosition = position + normal * displacement;
-                      gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);`
-          );
-          materialShader.value = shader;
+          onBeforeCompile(shader);
         }}
       />
     </mesh>
