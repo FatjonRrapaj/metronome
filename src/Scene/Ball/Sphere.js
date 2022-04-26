@@ -18,18 +18,6 @@ function Sphere({
   let materialShader = useRef({ value: null }).current;
   let transformSphere = useRef({ scale: 0.2, noise: 0 }).current;
 
-  // //non animated, more 'manual' version:
-  // let counter = useRef(0).current;
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     noiseFactor.value = counter % 2 === 0 ? bpm * 2 : 0;
-  //     scaleFactor.value = counter % 2 === 0 ? 0.3 : 0.2;
-  //     counter++;
-  //   }, (60 / bpm) * 1000);
-
-  //   return () => clearInterval(interval);
-  // }, [geometry.current]);
-
   useEffect(() => {
     if (!materialShader) return;
     const transformAnim = anime({
@@ -108,7 +96,6 @@ function Sphere({
                       vec3 newPosition = position + normal * displacement;
                       gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);`
           );
-          console.log("E N T R A D A CABRONSITO");
           materialShader.value = shader;
         }}
       />
