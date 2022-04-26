@@ -1,8 +1,10 @@
 # 3D METRONOME
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-It uses [THREE.JS](https://threejs.org/) and [React Three Fiber](https://github.com/pmndrs/react-three-fiber) for visualization
-🎬, [ANIME JS](https://github.com/juliangarnier/anime/) for animations🎞 and [Zustand](https://github.com/pmndrs/zustand) for state management🐻
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
+
+It uses [THREE.JS](https://threejs.org/) and [React Three Fiber](https://github.com/pmndrs/react-three-fiber) for visualization 🎬
+
+[ANIME JS](https://github.com/juliangarnier/anime/) for animations🎞 and [Zustand](https://github.com/pmndrs/zustand) for state management🐻
 
 ## Available Scripts
 
