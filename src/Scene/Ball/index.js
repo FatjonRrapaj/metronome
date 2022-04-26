@@ -8,7 +8,11 @@ function Ball() {
   const { bpm, audioEnabled, color, wireframeColor, emissiveIntensity } =
     useStore((state) => state);
 
-  const [clickSound] = useState(() => new Audio(click));
+  const [clickSound] = useState(() => {
+    const audio = new Audio(click);
+    audio.muted = false;
+    return audio;
+  });
 
   useEffect(() => {
     let interval;

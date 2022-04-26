@@ -92,7 +92,7 @@ function Sphere({
       <icosahedronBufferGeometry
         ref={geometry}
         attach="geometry"
-        args={[500, 30]}
+        args={[500, 20]}
       />
       <meshStandardMaterial
         color={color}
