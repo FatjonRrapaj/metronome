@@ -1,10 +1,24 @@
+import { useEffect, useState } from "react";
+
 import Sphere from "./Sphere";
 import useStore from "../../store";
+import click from "../../assets/sounds/click.wav";
 
 function Ball() {
-  const { color, wireframeColor, emissiveIntensity } = useStore(
+  const { bpm, color, wireframeColor, emissiveIntensity } = useStore(
     (state) => state
   );
+
+  const [clickSound] = useState(() => new Audio(click));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      clickSound.play();
+    }, (60 / bpm) * 1000);
+
+    return () => clearInterval(interval);
+  }, [bpm]);
+
   return (
     <group>
       <Sphere
