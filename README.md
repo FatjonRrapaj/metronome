@@ -23,4 +23,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser
 
 ### `Having troubles/suggestions or don't like what you see?`
 
-I'd love to hear your feetback Snowplow!
+I'd love to hear your feedback Snowplow!
