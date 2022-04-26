@@ -17,9 +17,15 @@ function Title() {
       />
       <Text
         size={0.8}
-        position={[0, 22, 700]}
+        position={[-6, 22, 700]}
         rotation={[Math.PI / 16, 0, 0]}
-        children="METRONOME"
+        children="METRO"
+      />
+      <Text
+        size={0.8}
+        position={[8, 22, 700]}
+        rotation={[Math.PI / 16, 0, 0]}
+        children="NOME"
       />
     </group>
   );
