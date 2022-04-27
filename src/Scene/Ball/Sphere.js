@@ -24,7 +24,7 @@ function Sphere({
       targets: transformSphere,
       noise: bpm * 4,
       scale: maxScale,
-      duration: (60 / bpm) * 1000,
+      duration: (60 / bpm / 2) * 1000,
       direction: "alternate",
       loop: true,
       autoplay: false,
