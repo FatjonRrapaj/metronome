@@ -28,7 +28,7 @@ function Sphere({
       direction: "alternate",
       loop: true,
       autoplay: false,
-      easing: "easeInOutSine",
+      easing: "easeInOutCubic",
     });
     transformAnim.play();
 
